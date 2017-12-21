@@ -16,8 +16,7 @@ app.use(passport.initialize());
 app.use(express.static(__dirname + '/dist'));
 
 // Node variables
-const APP_HOST = process.env.APP_HOST;
-const APP_PORT = process.env.APP_PORT;
+const APP_PORT = process.env.PORT || 3000;
 const DB_CONNECTION = process.env.MONGODB_URI;
 
 const mongodbUri = DB_CONNECTION;
@@ -39,13 +38,13 @@ app.all('/*', function(req, res) {
     res.sendFile(__dirname + '/dist/index.html');
 });
 
-const server = app.listen(APP_PORT, APP_HOST, () => {
+const server = app.listen(APP_PORT, () => {
 
   mongoose.connect(mongooseUri, dbOptions, (err) => {
     if (err) {
       console.log(err);
     }
-    console.log(`Server running at http://${APP_HOST}:${APP_PORT}`);
+    console.log('Server running...');
   });
 
 });
@@ -53,6 +52,6 @@ const server = app.listen(APP_PORT, APP_HOST, () => {
 // Open browser
 var opn = require('opn');
 
-opn(`http://${APP_HOST}:${APP_PORT}`).then(() => {
+opn(`http://localhost:${APP_PORT}`).then(() => {
     console.log('Browser closed.');
 });
