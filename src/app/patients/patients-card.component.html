@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row card-container">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let patient of patients;trackBy:trackbyService.patient">
+            <div class="card">
+                <div class="card-header">
+                    <a [routerLink]="['/patients',patient.id,'details']" class="white">
+                        {{patient.firstName | capitalize }} {{ patient.lastName | capitalize }}
+                    </a>
+                    <a [routerLink]="['/patients',patient.id,'edit']">
+                        <i title="Edit"
+                           class="pull-right glyphicon glyphicon-edit edit-icon white"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="clearfix">
+                        <div class="pull-left card-body-left">
+                            <a href="#" class="white">
+                                <img src="assets/images/{{patient.gender | lowercase}}.png" class="card-image" />
+                            </a>
+                        </div>
+                        <div class="pull-left card-body-right">
+                            <div class="card-body-content">{{patient.email | trim }} {{patient.mobile | trim}}</div>
+                            <a [routerLink]="['/patients',patient.id,'appointments']">Appointments</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!patients.length">
+            No Records Found
+        </div>
+    </div>
+</div>

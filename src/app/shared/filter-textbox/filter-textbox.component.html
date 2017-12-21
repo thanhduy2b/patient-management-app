@@ -1,0 +1,6 @@
+<form>
+        Search:
+        <input type="text" name="filter"
+            [(ngModel)]="model.filter"
+            (keyup)="filterChanged($event)"  />
+</form>

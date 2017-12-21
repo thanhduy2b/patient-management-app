@@ -1,0 +1,35 @@
+<div class="patients view indent">
+    <div class="container">
+        <header>
+            <h3>
+                <span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;Appointments
+            </h3>
+        </header>
+        <br />
+        <div class="container">
+            <div *ngIf="patients">
+                <div class="row" *ngFor="let patient of patients;trackBy:trackbyService.patient">
+                    <h4>{{ patient.firstName | capitalize }} {{ patient.lastName | capitalize }}</h4>
+                    <br />
+                    <table *ngIf="patient.appointments && patient.appointments.length" class="table table-striped table-hover appointments-table">
+                        <tr *ngFor="let appointment of patient.appointments;trackBy:trackbyService.appointment">
+                          <td>{{ appointment.dateTime }}</td>
+                          <td class="text-right">{{ appointment.notes }}</td>
+                          <td class="text-right">{{ appointment.status }}</td>
+                        </tr>
+                    </table>
+                    <div *ngIf="!patient.appointments || !patient.appointments.length">
+                        No appointments found
+                    </div>
+                </div>
+                <pm-pagination [hidden]="!patients"
+                    [totalItems]="totalRecords"
+                    [pageSize]="pageSize"
+                    (pageChanged)="pageChanged($event)"></pm-pagination>
+            </div>
+            <div *ngIf="!patients">
+                No patients found
+            </div>
+        </div>
+    </div>
+</div>
