@@ -10,8 +10,3 @@ sandboxes.ts
 # Build Generated Files
 src/app/**/*.js
 src/app/**/*.js.map
-
-# Ignore any Webpack generated files
-dist
-src/app/devDist
-src/app/dist

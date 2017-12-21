@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const Patient = require('../model/Patient');
 const router = express.Router();
 
-router.get('/:id', (req, res) => {
+router.get('/:id', passport.authenticate('jwt', { session: false}),
+  (req, res) => {
     const patientId = req.params.id;
 
     Patient.findOne({ id: patientId }, (err, patient) => {

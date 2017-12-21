@@ -28,3 +28,9 @@ export interface IApiResponse {
     status: boolean;
     error?: string;
 }
+
+export interface IApiAuthResponse {
+  success: boolean,
+  token?: string,
+  msg?: string
+}

@@ -14,11 +14,9 @@ export class CanActivateGuard implements CanActivate {
         return true;
     }
 
-    // // Track URL user is trying to go to so we can send them there after logging in
-    // this.authService.redirectUrl = state.url;
-    // this.router.navigate(['/login']);
-    // return false;
-
-    return true;
+    // Track URL user is trying to go to so we can send them there after logging in
+    this.authService.redirectUrl = state.url;
+    this.router.navigate(['/login']);
+    return false;
   }
 }
