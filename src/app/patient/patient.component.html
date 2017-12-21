@@ -1,0 +1,34 @@
+<div class="container">
+    <header>
+        <h3><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Patient Information</h3>
+    </header>
+    <br />
+    <div class="navbar">
+        <ul class="nav navbar-nav">
+            <li class="toolbar-item" *ngIf="!isNewPatient">
+                <a routerLink="details" routerLinkActive="active">
+                   <span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;Patient Details
+                </a>
+            </li>
+            <li class="toolbar-item" *ngIf="!isNewPatient">
+                <a routerLink="appointments" routerLinkActive="active">
+                    <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;Patient Appointments
+                </a>
+            </li>
+            <li class="toolbar-item">
+                <a routerLink="edit" routerLinkActive="active" *ngIf="isNewPatient">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;New Patient
+                </a>
+                <a routerLink="edit" routerLinkActive="active" *ngIf="!isNewPatient">
+                    <span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Edit Patient
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="container">
+        <router-outlet></router-outlet>
+        <br />
+        <br />
+        <a routerLink="/patients">Back to list</a>
+    </div>
+</div>

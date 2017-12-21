@@ -1,0 +1,19 @@
+<div class="container" *ngIf="patient">
+  <div class="row">
+    <div class="col-md-2">
+      <img src="assets/images/{{patient.gender | lowercase}}.png" class="details-image" />
+    </div>
+    <div class="col-md-10">
+      <h4>
+          {{ patient.firstName | capitalize }} {{ patient.lastName | capitalize }}&nbsp;
+      </h4>
+      <br />
+      {{ patient.email }}
+      <br />
+      {{ patient.mobile }}
+    </div>
+  </div>
+</div>
+<div *ngIf="!patient" class="container">
+   No customer found
+</div>

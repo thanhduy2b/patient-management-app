@@ -1,0 +1,14 @@
+.patient-form input[type='text'],
+.patient-form input[type='number'],
+.patient-form input[type='email'],
+.patient-form select {
+    width:100%;
+}
+
+.patient-form .ng-invalid {
+  border-left: 5px solid #a94442;
+}
+
+.patient-form .ng-valid {
+  border-left: 5px solid #42A948;
+}

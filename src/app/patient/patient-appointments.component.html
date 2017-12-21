@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row" *ngIf="patient && patient.appointments">
+        <h4>Appointments for {{ patient.firstName | capitalize }} {{ patient.lastName | capitalize }}</h4>
+        <br />
+        <table class="table table-striped table-hover appointments-table">
+            <tr *ngFor="let appointment of patient.appointments;trackBy:trackbyService.appointment">
+                <td>{{ appointment.dateTime }}</td>
+                <td class="text-right">{{ appointment.notes }}</td>
+                <td class="text-right">{{ appointment.status }}</td>
+            </tr>
+        </table>
+    </div>
+    <div *ngIf="patient && !patient.appointments" class="row">
+        No appointments found
+    </div>
+    <div *ngIf="!patient" class="row">
+        No patient found
+    </div>
+</div>
