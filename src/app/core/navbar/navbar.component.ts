@@ -27,13 +27,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     logOut() {
         const isAuthenticated = this.authservice.isAuthenticated;
         if (isAuthenticated) {
-            this.authservice.logout()
-                .subscribe((status: boolean) => {
-                    this.growler.growl('Logged Out', GrowlerMessageType.Info);
-                    this.redirectToLogin();
-                    return;
-                },
-                (err: any) => console.log(err));
+            this.authservice.logout();
+            this.growler.growl('Logged Out', GrowlerMessageType.Info);
         }
         this.redirectToLogin();
     }

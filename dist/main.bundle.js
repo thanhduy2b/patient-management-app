@@ -522,22 +522,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 
 var AuthInterceptor = (function () {
     function AuthInterceptor() {
     }
     AuthInterceptor.prototype.intercept = function (req, next) {
-        // Get the auth header (fake value is shown here)
-        var authHeader = '49a5kdkv409fd39'; //this.authService.getAuthHeader();
-        var authReq = req.clone({ headers: req.headers.set('Authorization', authHeader) });
+        var authReq = req.clone({ setHeaders: { Authorization: localStorage.getItem('token') || '' } });
         return next.handle(authReq);
     };
     AuthInterceptor = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [])
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])()
     ], AuthInterceptor);
     return AuthInterceptor;
 }());
@@ -775,15 +769,10 @@ var NavbarComponent = (function () {
         this.sub.unsubscribe();
     };
     NavbarComponent.prototype.logOut = function () {
-        var _this = this;
         var isAuthenticated = this.authservice.isAuthenticated;
         if (isAuthenticated) {
-            this.authservice.logout()
-                .subscribe(function (status) {
-                _this.growler.growl('Logged Out', __WEBPACK_IMPORTED_MODULE_3__growler_growler_service__["a" /* GrowlerMessageType */].Info);
-                _this.redirectToLogin();
-                return;
-            }, function (err) { return console.log(err); });
+            this.authservice.logout();
+            this.growler.growl('Logged Out', __WEBPACK_IMPORTED_MODULE_3__growler_growler_service__["a" /* GrowlerMessageType */].Info);
         }
         this.redirectToLogin();
     };
@@ -1063,43 +1052,35 @@ var AuthService = (function () {
         this.http = http;
         this.authUrl = '/api/auth';
         this.isAuthenticated = false;
-        this.authChanged = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
     }
-    AuthService.prototype.userAuthChanged = function (status) {
-        this.authChanged.emit(status); //Raise changed event
-    };
     AuthService.prototype.login = function (userLogin) {
         var _this = this;
         return this.http.post(this.authUrl + '/login', userLogin)
             .pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (loggedIn) {
-            _this.isAuthenticated = loggedIn;
-            _this.userAuthChanged(loggedIn);
-            return loggedIn;
+            if (loggedIn && loggedIn.success) {
+                _this.isAuthenticated = true;
+                // store token
+                localStorage.setItem('token', loggedIn.token);
+                return true;
+            }
+            else {
+                return false;
+            }
         }), Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["catchError"])(this.handleError));
     };
     AuthService.prototype.logout = function () {
-        var _this = this;
-        return this.http.post(this.authUrl + '/logout', null)
-            .pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["map"])(function (loggedOut) {
-            _this.isAuthenticated = !loggedOut;
-            _this.userAuthChanged(!loggedOut); //Return loggedIn status
-            return status;
-        }), Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["catchError"])(this.handleError));
+        this.isAuthenticated = false;
+        // clear token
+        localStorage.removeItem('token');
     };
     AuthService.prototype.handleError = function (error) {
         console.error('server error:', error);
         if (error.error instanceof Error) {
             var errMessage = error.error.message;
             return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["a" /* Observable */].throw(errMessage);
-            // Use the following instead if using lite-server
-            //return Observable.throw(err.text() || 'backend server error');
         }
         return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["a" /* Observable */].throw(error || 'Server error');
     };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */])
-    ], AuthService.prototype, "authChanged", void 0);
     AuthService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */]])
@@ -1524,7 +1505,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"view\">\n    <div class=\"container\">\n        <header>\n            <h3><span class=\"glyphicon glyphicon-lock\"></span> Login</h3>\n        </header>\n        <br />\n        <form [formGroup]=\"loginForm\" (ngSubmit)=\"submit(loginForm)\" class=\"login-form\" novalidate>\n            <div class=\"login\">\n                <div class=\"row\">\n                    <div class=\"col-md-2\">\n                        Email:\n                    </div>\n                    <div class=\"col-md-10\">\n                        <input type=\"email\" name=\"email\" class=\"form-control\" formControlName=\"email\" />\n                        <div class=\"alert alert-danger\" [hidden]=\"loginForm.controls.email.untouched || loginForm.controls.email.valid\">\n                            A valid email address is required\n                        </div>\n                    </div>\n                </div>\n                <br />\n                <div class=\"row\">\n                    <div class=\"col-md-2\">\n                        Password:\n                    </div>\n                    <div class=\"col-md-10\">\n                        <input type=\"password\" name=\"password\" class=\"form-control\" formControlName=\"password\" />\n                        <div class=\"alert alert-danger\" [hidden]=\"loginForm.controls.password.untouched || loginForm.controls.password.valid\">\n                            Password is required (6 or more characters with at least one number)\n                        </div>\n                    </div>\n                </div>\n                <br />\n                <div class=\"row\">\n                    <div class=\"col-md-12\">\n                        <button type=\"submit\" class=\"btn btn-success\" [disabled]=\"!loginForm.valid\">Login</button>\n                    </div>\n                </div>\n                <br />\n                <div class=\"statusRow\">\n                    <br />\n                    <div class=\"label label-important\" *ngIf=\"errorMessage\">\n                        <span class=\"glyphicon glyphicon-thumbs-down icon-white\"></span>&nbsp;&nbsp;Error: {{ errorMessage }}\n                    </div>\n                </div>\n            </div>\n        </form>\n\n    </div>\n</div>\n"
+module.exports = "<div class=\"view\">\n    <div class=\"container\">\n        <header>\n            <h3><span class=\"glyphicon glyphicon-lock\"></span> Login</h3>\n        </header>\n        <br />\n        <form [formGroup]=\"loginForm\" (ngSubmit)=\"submit(loginForm)\" class=\"login-form\" novalidate>\n            <div class=\"login\">\n                <div class=\"row\">\n                    <div class=\"col-md-2\">\n                        Email:\n                    </div>\n                    <div class=\"col-md-10\">\n                        <input type=\"email\" name=\"email\" class=\"form-control\" formControlName=\"email\" />\n                        <div class=\"alert alert-danger\" [hidden]=\"loginForm.controls.email.untouched || loginForm.controls.email.valid\">\n                            A valid email address is required\n                        </div>\n                    </div>\n                </div>\n                <br />\n                <div class=\"row\">\n                    <div class=\"col-md-2\">\n                        Password:\n                    </div>\n                    <div class=\"col-md-10\">\n                        <input type=\"password\" name=\"password\" class=\"form-control\" formControlName=\"password\" />\n                        <div class=\"alert alert-danger\" [hidden]=\"loginForm.controls.password.untouched || loginForm.controls.password.valid\">\n                            Password is required (6 or more characters with at least one number)\n                        </div>\n                    </div>\n                </div>\n                <br />\n                <div class=\"row\">\n                    <div class=\"col-md-12\">\n                        <button type=\"submit\" class=\"btn btn-success\" [disabled]=\"!loginForm.valid\">Login</button>\n                    </div>\n                </div>\n                <br />\n                <div class=\"statusRow\">\n                    <br />\n                    <div class=\"label label-important\" *ngIf=\"errorMessage\">\n                        <span class=\"glyphicon glyphicon-thumbs-down icon-white\"></span>&nbsp;&nbsp;Error: {{ errorMessage }}\n                    </div>\n                </div>\n            </div>\n        </form>\n    </div>\n</div>\n"
 
 /***/ }),
 

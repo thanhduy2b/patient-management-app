@@ -29,11 +29,10 @@ var CanActivateGuard = (function () {
         if (this.authService.isAuthenticated) {
             return true;
         }
-        // // Track URL user is trying to go to so we can send them there after logging in
-        // this.authService.redirectUrl = state.url;
-        // this.router.navigate(['/login']);
-        // return false;
-        return true;
+        // Track URL user is trying to go to so we can send them there after logging in
+        this.authService.redirectUrl = state.url;
+        this.router.navigate(['/login']);
+        return false;
     };
     CanActivateGuard = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),

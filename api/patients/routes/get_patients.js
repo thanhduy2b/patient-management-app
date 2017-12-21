@@ -4,8 +4,8 @@ const passport = require('passport');
 const Patient = require('../model/Patient');
 const router = express.Router();
 
-router.get('/page/:skip/:top', (req, res) => {
-
+router.get('/page/:skip/:top', passport.authenticate('jwt', { session: false}),
+  (req, res) => {
     Patient.find((err, patients) => {
       if(err) {
         res.status(404).json(err);

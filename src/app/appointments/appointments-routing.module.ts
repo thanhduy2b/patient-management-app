@@ -6,7 +6,9 @@ import { AppointmentsComponent } from './appointments.component';
 import { CanActivateGuard } from '../core/can-activate.guard';
 
 const routes: Routes = [
-  { path: '', component: AppointmentsComponent }
+  { path: '',
+    component: AppointmentsComponent,
+    canActivate: [ CanActivateGuard ]}
 ];
 
 @NgModule({

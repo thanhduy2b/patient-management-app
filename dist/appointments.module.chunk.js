@@ -20,7 +20,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 var routes = [
-    { path: '', component: __WEBPACK_IMPORTED_MODULE_2__appointments_component__["a" /* AppointmentsComponent */] }
+    { path: '',
+        component: __WEBPACK_IMPORTED_MODULE_2__appointments_component__["a" /* AppointmentsComponent */],
+        canActivate: [__WEBPACK_IMPORTED_MODULE_3__core_can_activate_guard__["a" /* CanActivateGuard */]] }
 ];
 var AppointmentsRoutingModule = (function () {
     function AppointmentsRoutingModule() {
